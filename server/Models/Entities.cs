@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace NameDb.Model
+namespace NameDb.Model.Entities
 {
   public class User
   {
