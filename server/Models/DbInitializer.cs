@@ -17,20 +17,40 @@ namespace NameDb.Model
         // do nothing if not seeded
         return;
       }
-      Console.WriteLine("Adding Seed Data...");
+      
+      var firstMeetingId = Guid.NewGuid(); // need to pre-generate guids to get around foreign key constrain error
+      var userId =  Guid.NewGuid();
+
       var users = new List<User>() {
         new User{
-          UserId = Guid.NewGuid(),
+          UserId = userId,
           Email = "john@email.com"}
-      };
+          };
       foreach (User eachUser in users)
       {
         context.User.Add(eachUser);
       }
+      context.SaveChanges()
+      ;
+      var firstMeetings = new List<FirstMeeting>() {
+        new FirstMeeting{
+          UserId = userId, 
+          FirstMeetingId = firstMeetingId, 
+          FirstMeetingName = "Ben's Party"
+        
+        }
+      };
+      foreach (FirstMeeting eachMeeting in firstMeetings)
+      {
+        context.FirstMeeting.Add(eachMeeting);
+      };
       context.SaveChanges();
-
       var contacts = new List<Contact>() {
-        new Contact{ContactId = Guid.NewGuid(), Name = "John" }
+        new Contact{ 
+          FirstMeetingId = firstMeetingId, 
+          UserId = userId, 
+          Name = "John" 
+          }
       };
       foreach (Contact eachContact in contacts)
       {
@@ -38,14 +58,7 @@ namespace NameDb.Model
       };
       context.SaveChanges();
       
-      var firstMeetings = new List<FirstMeeting>() {
-        new FirstMeeting{FirstMeetingId = Guid.NewGuid(), FirstMeetingName = "Ben's Party"}
-      };
-      foreach (FirstMeeting eachMeeting in firstMeetings)
-      {
-        context.FirstMeeting.Add(eachMeeting);
-      };
-      context.SaveChanges();
+
     }
 
   }
