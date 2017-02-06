@@ -13,18 +13,19 @@ namespace server.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
             modelBuilder
-                .HasAnnotation("ProductVersion", "1.0.0-rtm-21431");
+                .HasAnnotation("Npgsql:PostgresExtension:.uuid-ossp", "'uuid-ossp', '', ''")
+                .HasAnnotation("ProductVersion", "1.0.1");
 
-            modelBuilder.Entity("NameDb.Model.Contact", b =>
+            modelBuilder.Entity("NameDb.Model.Entities.Contact", b =>
                 {
-                    b.Property<int>("ContactId")
+                    b.Property<Guid>("ContactId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("FirstMeetingId");
+                    b.Property<Guid>("FirstMeetingId");
 
                     b.Property<string>("Name");
 
-                    b.Property<int>("UserId");
+                    b.Property<Guid>("UserId");
 
                     b.HasKey("ContactId");
 
@@ -35,43 +36,53 @@ namespace server.Migrations
                     b.ToTable("Contact");
                 });
 
-            modelBuilder.Entity("NameDb.Model.FirstMeeting", b =>
+            modelBuilder.Entity("NameDb.Model.Entities.FirstMeeting", b =>
                 {
-                    b.Property<int>("FirstMeetingId")
+                    b.Property<Guid>("FirstMeetingId")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("FirstMeetingDate");
 
                     b.Property<string>("FirstMeetingName");
 
-                    b.Property<int>("UserId");
+                    b.Property<Guid>("UserId");
 
                     b.HasKey("FirstMeetingId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("FirstMeeting");
                 });
 
-            modelBuilder.Entity("NameDb.Model.User", b =>
+            modelBuilder.Entity("NameDb.Model.Entities.User", b =>
                 {
-                    b.Property<int>("UserId")
+                    b.Property<Guid>("UserId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("Email");
+                    b.Property<string>("Email");
 
                     b.HasKey("UserId");
 
                     b.ToTable("User");
                 });
 
-            modelBuilder.Entity("NameDb.Model.Contact", b =>
+            modelBuilder.Entity("NameDb.Model.Entities.Contact", b =>
                 {
-                    b.HasOne("NameDb.Model.FirstMeeting", "FirstMeeting")
+                    b.HasOne("NameDb.Model.Entities.FirstMeeting", "FirstMeeting")
                         .WithMany("Contacts")
                         .HasForeignKey("FirstMeetingId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("NameDb.Model.User")
+                    b.HasOne("NameDb.Model.Entities.User", "User")
                         .WithMany("Contacts")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("NameDb.Model.Entities.FirstMeeting", b =>
+                {
+                    b.HasOne("NameDb.Model.Entities.User", "User")
+                        .WithMany("FirstMeeting")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

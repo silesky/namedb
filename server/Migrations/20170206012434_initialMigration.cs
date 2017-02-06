@@ -8,28 +8,15 @@ namespace server.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "FirstMeeting",
-                columns: table => new
-                {
-                    FirstMeetingId = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGeneratedOnAdd", true),
-                    FirstMeetingDate = table.Column<string>(nullable: true),
-                    FirstMeetingName = table.Column<string>(nullable: true),
-                    UserId = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_FirstMeeting", x => x.FirstMeetingId);
-                });
+            migrationBuilder.EnsurePostgresExtension("uuid-ossp");
 
             migrationBuilder.CreateTable(
                 name: "User",
                 columns: table => new
                 {
-                    UserId = table.Column<int>(nullable: false)
+                    UserId = table.Column<Guid>(nullable: false)
                         .Annotation("Npgsql:ValueGeneratedOnAdd", true),
-                    Email = table.Column<int>(nullable: false)
+                    Email = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -37,14 +24,35 @@ namespace server.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "FirstMeeting",
+                columns: table => new
+                {
+                    FirstMeetingId = table.Column<Guid>(nullable: false)
+                        .Annotation("Npgsql:ValueGeneratedOnAdd", true),
+                    FirstMeetingDate = table.Column<string>(nullable: true),
+                    FirstMeetingName = table.Column<string>(nullable: true),
+                    UserId = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FirstMeeting", x => x.FirstMeetingId);
+                    table.ForeignKey(
+                        name: "FK_FirstMeeting_User_UserId",
+                        column: x => x.UserId,
+                        principalTable: "User",
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Contact",
                 columns: table => new
                 {
-                    ContactId = table.Column<int>(nullable: false)
+                    ContactId = table.Column<Guid>(nullable: false)
                         .Annotation("Npgsql:ValueGeneratedOnAdd", true),
-                    FirstMeetingId = table.Column<int>(nullable: false),
+                    FirstMeetingId = table.Column<Guid>(nullable: false),
                     Name = table.Column<string>(nullable: true),
-                    UserId = table.Column<int>(nullable: false)
+                    UserId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -71,6 +79,11 @@ namespace server.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Contact_UserId",
                 table: "Contact",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FirstMeeting_UserId",
+                table: "FirstMeeting",
                 column: "UserId");
         }
 

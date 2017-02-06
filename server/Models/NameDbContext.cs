@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using NameDb.Model.Entities;
+using Npgsql.EntityFrameworkCore.PostgreSQL;
 
 namespace NameDb.Model
 {
@@ -14,6 +15,12 @@ namespace NameDb.Model
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     { 
 
+    }
+   protected override void OnModelCreating(ModelBuilder builder)
+    {
+        base.OnModelCreating(builder);
+
+        builder.HasPostgresExtension("uuid-ossp");
     }
     public DbSet<User> User { get; set; }
     public DbSet<FirstMeeting> FirstMeeting { get; set; }

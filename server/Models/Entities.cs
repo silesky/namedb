@@ -1,14 +1,14 @@
 using System.Collections.Generic;
-
+using System;
 namespace NameDb.Model.Entities
 {
   public class User
   {
-    public int UserId { get; set; }
-    public int Email { get; set; }
+    public Guid UserId { get; set; }
+    public string Email { get; set; }
 
-    public List<Contact> Contacts { get; set; } // (collection nav.property) all the contacts I have altogether. 
-
+    public virtual List<Contact> Contacts { get; set; } // (collection nav.property) all the contacts I have altogether. 
+    public virtual List<FirstMeeting> FirstMeeting { get; set; }
   }
 
   // User -< Contact | User -< FirstMeeting | FirstMeeting -< Contact
@@ -21,21 +21,23 @@ namespace NameDb.Model.Entities
 
   public class FirstMeeting
   {
-    public int FirstMeetingId { get; set; }
-    public int UserId { get; set; }
+    public Guid FirstMeetingId { get; set; }
+    public Guid UserId { get; set; }
     public string FirstMeetingName { get; set; }
     public string FirstMeetingDate { get; set; }
-
-    public List<Contact> Contacts { get; set; } // all the contacts I made at John's party
+    public virtual User User { get; set; }
+    public virtual List<Contact> Contacts { get; set; } // all the contacts I made at John's party
   }
 
   public class Contact
-  {
 
-    public int ContactId { get; set; } // foreign key
-    public int UserId { get; set; }
-    public int FirstMeetingId { get; set; }
-    public FirstMeeting FirstMeeting { get; set; }   //  (reference nav. property) this is the counterpart to List<Contact> Contacts
+  {
+    public Guid ContactId { get; set; }
+    public Guid FirstMeetingId { get; set; }
+    public Guid UserId { get; set; }
+    public virtual FirstMeeting FirstMeeting { get; set; }   //  (reference nav. property) this is the counterpart to List<Contact> Contacts
+   
+    public virtual User User { get; set; }
     public string Name { get; set; }
 
   }
