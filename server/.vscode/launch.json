@@ -1,12 +1,19 @@
 {
     "version": "0.2.0",
     "configurations": [
+      
+        {
+            "name": ".NET Core Attach",
+            "type": "coreclr",
+            "request": "attach",
+            "processId": "${command.pickProcess}"
+        },
         {
             "name": ".NET Core Launch (web)",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceRoot}/bin/Debug/netcoreapp1.0/namedb.dll",
+            "program": "${workspaceRoot}/bin/Debug/netcoreapp1.0/server.dll",
             "args": [],
             "cwd": "${workspaceRoot}",
             "stopAtEntry": false,
@@ -31,12 +38,6 @@
             "sourceFileMap": {
                 "/Views": "${workspaceRoot}/Views"
             }
-        },
-        {
-            "name": ".NET Core Attach",
-            "type": "coreclr",
-            "request": "attach",
-            "processId": "${command.pickProcess}"
         }
     ]
 }
