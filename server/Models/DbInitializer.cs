@@ -1,8 +1,6 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.EntityFrameworkCore;
 using NameDb.Model.Entities;
 namespace NameDb.Model
 {
@@ -17,7 +15,7 @@ namespace NameDb.Model
         // do nothing if not seeded
         return;
       }
-      
+
       var firstMeetingId = Guid.NewGuid(); // need to pre-generate guids to get around foreign key constrain error
       var userId =  Guid.NewGuid();
 
@@ -34,10 +32,10 @@ namespace NameDb.Model
       ;
       var firstMeetings = new List<FirstMeeting>() {
         new FirstMeeting{
-          UserId = userId, 
-          FirstMeetingId = firstMeetingId, 
+          UserId = userId,
+          FirstMeetingId = firstMeetingId,
           FirstMeetingName = "Ben's Party"
-        
+
         }
       };
       foreach (FirstMeeting eachMeeting in firstMeetings)
@@ -46,10 +44,10 @@ namespace NameDb.Model
       };
       context.SaveChanges();
       var contacts = new List<Contact>() {
-        new Contact{ 
-          FirstMeetingId = firstMeetingId, 
-          UserId = userId, 
-          Name = "John" 
+        new Contact{
+          FirstMeetingId = firstMeetingId,
+          UserId = userId,
+          Name = "John"
           }
       };
       foreach (Contact eachContact in contacts)
@@ -57,7 +55,7 @@ namespace NameDb.Model
         context.Contact.Add(eachContact);
       };
       context.SaveChanges();
-      
+
 
     }
 

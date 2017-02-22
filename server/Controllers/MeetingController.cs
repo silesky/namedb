@@ -9,18 +9,18 @@ namespace NameDb.Controllers
   [Route("api/[controller]")]
 
   // [Route("api/[controller]")] + class MeetingController = api/meeting  routing
-  public class MeetingController: Controller 
+  public class MeetingController: Controller
   {
-    private NameDbContext NameDbContextReference;
+    private NameDbContext _nameDbContextRef;
     public MeetingController(NameDbContext NameDbContext)
     {
-      NameDbContextReference = NameDbContext;
+      _nameDbContextRef = NameDbContext;
     }
 
     [HttpGet("")]
     public IEnumerable<FirstMeeting> GetAll()
     {
-      return NameDbContextReference.FirstMeeting.AsEnumerable();
+      return _nameDbContextRef.FirstMeeting.AsEnumerable();
     }
   }
 }

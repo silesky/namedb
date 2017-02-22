@@ -7,7 +7,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using NameDb.Model;
-using NameDb.Contracts;
 using NameDb.Repositories;
 namespace namedb
 {
@@ -34,9 +33,9 @@ namespace namedb
       services.AddDbContext<NameDbContext>(
           opts => opts.UseNpgsql(connectionString)
       );
-      services.AddSingleton<IContactRepository, ContactRepository>();
       // Add framework services.
       services.AddMvc();
+      services.AddSingleton<IContactRepository, ContactRepository>();
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

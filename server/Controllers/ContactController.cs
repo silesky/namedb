@@ -4,6 +4,7 @@ using System.Linq;
 using NameDb.Model;
 using System.Collections.Generic;
 using NameDb.Model.Entities;
+using NameDb.Repositories;
 namespace NameDb.Controllers
 {
   // top level class
@@ -12,22 +13,21 @@ namespace NameDb.Controllers
 
   public class ContactController : Controller
   {
-    private NameDbContext NameDbContextReference;
-    public ContactController(NameDbContext NameDbContext)
+    private ContactRepository _contactRepository;
+    public ContactController(NameDbContext dbContext)
     {
-      // default constructor gets instantiated, and the DbContext gets passed in. I need to be able to save this to a variable.
-      NameDbContextReference = NameDbContext;
+      // pass dbContext from this constructor to ContactRepository's constructor, and use it new a reference (so I can call the methods on it)
+      _contactRepository = new NameDb.Repositories.ContactRepository(dbContext);
     }
-    [HttpGet("")] 
+    [HttpGet("")]
     public IEnumerable<Contact> GetAll() {
-      return NameDbContextReference.Contact.AsEnumerable();
+      return _contactRepository.GetAll().AsEnumerable();
     }
 
     [HttpGet("{id:guid}")] // hits on api/contact
     public ActionResult Get(Guid id) {
-      // it's confusing, but I can't use "NameDbContext", because it's not a static class -- it needs to be instantiated. 
-      Contact contact = NameDbContextReference.Contact.FirstOrDefault(el => el.ContactId == id);
-      return new ObjectResult(contact);
+      // it's confusing, but I can't use "NameDbContext", because it's not a static class -- it needs to be instantiated.
+      return new ObjectResult(_contactRepository.Get(id));
     }
 
   }
