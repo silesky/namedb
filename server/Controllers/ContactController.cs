@@ -28,8 +28,6 @@ namespace NameDb.Controllers
       // it's confusing, but I can't use "NameDbContext", because it's not a static class -- it needs to be instantiated. 
       Contact contact = NameDbContextReference.Contact.FirstOrDefault(el => el.ContactId == id);
       return new ObjectResult(contact);
-
-
     }
 
   }
